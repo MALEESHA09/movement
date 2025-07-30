@@ -538,7 +538,7 @@
         <li><a href="/adminAssetHistory" class="menu-item">Asset History</a></li>
         <li><a href="/admin/adminAsset" class="menu-item">Asset</a></li>
         <li><a href="/adminInvoice" class="menu-item">Invoice</a></li>
-        <li><a href="/adminMovement" class="menu-item active">Movement</a></li>
+        <li><a href="/adminMovement" class="menu-item ">Movement</a></li>
       </ul>
     </nav>
   </aside>
@@ -574,7 +574,7 @@
           </button>
         </li>
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="movements-tab" data-bs-toggle="tab" data-bs-target="#movements" type="button" role="tab" aria-controls="movements" aria-selected="false">
+          <button class="nav-link" id="movements-tab" data-bs-toggle="tab" data-bs-target="#movement" type="button" role="tab" aria-controls="movements" aria-selected="false">
             <i class="fas fa-exchange-alt me-2"></i>Movement History
           </button>
         </li>
@@ -639,7 +639,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr th:each="location, iterStat : ${locations}">
+              <tr th:each="location, iterStat : ${location}">
                 <td th:text="${iterStat.count}"></td>
                 <td th:text="${location.locationId}"></td>
                 <td th:text="${location.departmentName}"></td>
@@ -654,7 +654,7 @@
                   </button>
                 </td>
               </tr>
-              <tr th:if="${#lists.isEmpty(locations)}">
+              <tr th:if="${#lists.isEmpty(location)}">
                 <td colspan="6" class="text-center text-danger">No locations found in the database.</td>
               </tr>
               </tbody>
@@ -755,7 +755,7 @@
         </div>
 
         <!-- Movement History Tab -->
-        <div class="tab-pane fade" id="movements" role="tabpanel" aria-labelledby="movements-tab">
+        <div class="tab-pane fade" id="movement" role="tabpanel" aria-labelledby="movements-tab">
           <div class="table-responsive">
             <table class="table table-bordered table-hover align-middle">
               <thead style="background-color: #800000; color: #fff;">
@@ -805,7 +805,7 @@
                   </button>
                 </td>
               </tr>
-              <tr th:each="movement, iterStat : ${movements}">
+              <tr th:each="movement, iterStat : ${movement}">
                 <td th:text="${iterStat.count}"></td>
                 <td>
                   <span th:classappend="${movement.asset.activityStatus} ? 'status-available' : 'status-maintenance'"></span>
