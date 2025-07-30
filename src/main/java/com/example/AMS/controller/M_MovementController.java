@@ -28,15 +28,12 @@ public class M_MovementController {
         this.movementService = movementService;
     }
 
-    // Display all movements
     @GetMapping
     public String showAllMovements(Model model) {
-        List<Location> movements = movementService.getAllMovements();
-        model.addAttribute("movements", movements);
-        return "adminMovement"; // Your Thymeleaf template name
+        model.addAttribute("locations", movementService.getAllMovements());
+        return "Movement/Admin";
     }
 
-    // Display movement history (filtered by date)
     @GetMapping("/history")
     public String showMovementHistory(
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
@@ -50,59 +47,44 @@ public class M_MovementController {
             movements = movementService.getAllMovements();
         }
         
-        model.addAttribute("movements", movements);
-        return "movementHistory"; // Your Thymeleaf template name for history tab
+        model.addAttribute("locations", movements);
+        return "Movement/Admin";
     }
 
-    // Show form to add new movement
     @GetMapping("/new")
-    public String showAddMovementForm(Model model) {
-        model.addAttribute("movement", new Location());
-        return "addMovement"; // Your Thymeleaf template name for add form
+    public String showAddForm(Model model) {
+        model.addAttribute("location", new Location());
+        return "Movement/Admin";
     }
 
-    // Process adding new movement
     @PostMapping("/save")
-    public String saveMovement(@ModelAttribute("movement") Location location) {
+    public String saveMovement(@ModelAttribute Location location) {
         movementService.recordMovement(location);
         return "redirect:/adminMovement";
     }
 
-    // Show form to edit movement
     @GetMapping("/edit/{id}")
-    public String showEditMovementForm(@PathVariable String id, Model model) {
-        Location movement = movementService.getMovementById(id);
-        model.addAttribute("movement", movement);
-        return "editMovement"; // Your Thymeleaf template name for edit form
+    public String showEditForm(@PathVariable Long id, Model model) {
+        model.addAttribute("location", movementService.getMovementById(id));
+        return "Movement/Admin";
     }
 
-    // Process updating movement
     @PostMapping("/update/{id}")
-    public String updateMovement(@PathVariable String id, @ModelAttribute("movement") Location location) {
+    public String updateMovement(@PathVariable Long id, @ModelAttribute Location location) {
         movementService.updateMovement(id, location);
         return "redirect:/adminMovement";
     }
 
-    // Delete a movement
     @GetMapping("/delete/{id}")
-    public String deleteMovement(@PathVariable String id) {
+    public String deleteMovement(@PathVariable Long id) {
         movementService.deleteMovement(id);
         return "redirect:/adminMovement";
     }
 
-    // Search movements by department
-    @GetMapping("/search")
-    public String searchMovements(@RequestParam String departmentName, Model model) {
-        List<Location> movements = movementService.searchMovementsByDepartment(departmentName);
-        model.addAttribute("movements", movements);
-        return "adminMovement"; // Return to main view with filtered results
-    }
-
-    // View movement details
-    @GetMapping("/view/{id}")
-    public String viewMovementDetails(@PathVariable String id, Model model) {
-        Location movement = movementService.getMovementById(id);
-        model.addAttribute("movement", movement);
-        return "viewMovement"; // Your Thymeleaf template name for details view
+    @GetMapping("/asset/{assetId}")
+    public String getAssetMovementHistory(@PathVariable Long assetId, Model model) {
+        model.addAttribute("locations", movementService.getMovementHistoryForAsset(assetId));
+        model.addAttribute("assetId", assetId);
+        return "Movement/Admin";
     }
 }

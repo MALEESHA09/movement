@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import com.example.AMS.model.Location;
 
 @Repository
-public interface M_LocationRepository extends JpaRepository<Location, String> {
+public interface M_LocationRepository extends JpaRepository<Location, Long> {
     // Add any custom queries you need for locations
-    boolean existsByLocationId(String locationId);
+    boolean existsById(Long id);
 }

@@ -69,7 +69,7 @@ public class M_InvoiceService {
 
     // Validate invoice relationships
     private void validateInvoiceRelationships(Invoice invoice) {
-        if (invoice.getAsset() == null || !assetRepository.existsById(invoice.getAsset().getAssetId())) {
+        if (invoice.getAsset() == null || !assetRepository.existsById(invoice.getAsset().getId())) {
             throw new RuntimeException("Invalid or missing Asset");
         }
         if (invoice.getVendor() == null || !vendorRepository.existsById(invoice.getVendor().getVendorId())) {

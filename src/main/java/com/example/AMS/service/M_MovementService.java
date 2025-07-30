@@ -20,19 +20,18 @@ public class M_MovementService {
         this.movementRepository = movementRepository;
     }
 
-    // Record a new movement (location transfer)
+    // Record a new movement
     public Location recordMovement(Location location) {
-        // Set the transfer date to now if not provided
         if (location.getTransferDate() == null) {
             location.setTransferDate(new Date());
         }
         return movementRepository.save(location);
     }
 
-    // Update a movement (location transfer)
-    public Location updateMovement(String locationId, Location locationDetails) {
-        Location location = movementRepository.findById(locationId)
-                .orElseThrow(() -> new RuntimeException("Movement not found with id: " + locationId));
+    // Update a movement
+    public Location updateMovement(Long id, Location locationDetails) {
+        Location location = movementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
         
         location.setDepartmentName(locationDetails.getDepartmentName());
         location.setTransferDate(locationDetails.getTransferDate());
@@ -52,31 +51,36 @@ public class M_MovementService {
         return movementRepository.findByTransferDateBetween(startDate, endDate);
     }
 
-    // Get current active movements
+    // Get active movements
     public List<Location> getActiveMovements() {
         return movementRepository.findActiveLocations();
     }
 
     // Get movement by ID
-    public Location getMovementById(String locationId) {
-        return movementRepository.findById(locationId)
-                .orElseThrow(() -> new RuntimeException("Movement not found with id: " + locationId));
+    public Location getMovementById(Long id) {
+        return movementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
     }
 
     // Delete a movement
-    public void deleteMovement(String locationId) {
-        Location location = movementRepository.findById(locationId)
-                .orElseThrow(() -> new RuntimeException("Movement not found with id: " + locationId));
+    public void deleteMovement(Long id) {
+        Location location = movementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Location not found with id: " + id));
         movementRepository.delete(location);
     }
 
-    // Search movements by department name
-    public List<Location> searchMovementsByDepartment(String departmentName) {
+    // Search by department name
+    public List<Location> searchByDepartment(String departmentName) {
         return movementRepository.findByDepartmentNameContainingIgnoreCase(departmentName);
     }
 
-    // Get locations with assets (representing movements with assets)
+    // Get movements with assets
     public List<Location> getMovementsWithAssets() {
         return movementRepository.findLocationsWithAssets();
+    }
+
+    // Get movement history for an asset
+    public List<Location> getMovementHistoryForAsset(Long assetId) {
+        return movementRepository.findByAssetId(assetId);
     }
 }
